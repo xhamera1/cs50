@@ -12,7 +12,7 @@ int main(void){
     int letter_count = 0;
     int word_count = 1;
     for(int i=0;i<length;++i){
-        if(all_text[i] == '.' ||all_text[i] == '!' || all_text[i] == '?' ||all_text[i] == '.'){
+        if(all_text[i] == '.' ||all_text[i] == '!' || all_text[i] == '?'){
             sentence_count++;
         }
         if(isalpha(all_text[i])){
