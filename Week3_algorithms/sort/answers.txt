@@ -1,0 +1,12 @@
+sort1 uses: Bubble sort
+
+How do you know?: This algorithm performs exceptionally well on sorted arrays but is less efficient on random and reversed arrays.
+
+sort2 uses: Merge sort
+
+How do you know?: This algorithm, with an O(nlogn) complexity for both worst and average cases,
+    performs the fastest on random and reversed arrays and shows similar efficiency on sorted and unsorted arrays.
+
+sort3 uses: Selection sort
+
+How do you know?: Not very quick algorithm, it performs the worst on already sorted arrays.
