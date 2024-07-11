@@ -1,8 +1,7 @@
 #include <cs50.h>
 #include <stdio.h>
-#include <cstdio>
-#include <cstdlib>
-
+#include <stdlib.h>
+#include <string.h>
 // Max number of candidates
 #define MAX 9
 
@@ -130,12 +129,17 @@ void record_preferences(int ranks[])
 void add_pairs(void)
 {
     // TODO
-    for(int i=0;i<candidate_count;++i{
-        for(int j=i;j<candidate_count;++j){
+    for(int i=0;i<candidate_count;++i){
+        for(int j=i+1;j<candidate_count;++j){
             if(i!=j){
                 if(preferences[i][j]>preferences[j][i]){
                     pairs[pair_count].winner = i;
                     pairs[pair_count].loser = j;
+                    ++pair_count;
+                }
+                if(preferences[i][j]<preferences[j][i]){
+                    pairs[pair_count].winner = j;
+                    pairs[pair_count].loser = i;
                     ++pair_count;
                 }
             }
@@ -159,18 +163,46 @@ void sort_pairs(void)
 
 }
 
+bool DFS_check_cycle(int w, int l){
+    if(w==l)return true;
+    for(int i=0;i<candidate_count;++i){
+        if(locked[l][i]){
+            if(DFS_check_cycle(w,i)){
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 // Lock pairs into the candidate graph in order, without creating cycles
 void lock_pairs(void)
 {
     // TODO
-    return;
+    for (int i=0;i<pair_count; i++){
+        if (!DFS_check_cycle(pairs[i].winner,pairs[i].loser)){
+            locked[pairs[i].winner][pairs[i].loser] = true;
+        }
+    }
 }
 
 // Print the winner of the election
 void print_winner(void)
 {
     // TODO
-    return;
+    for(int i=0;i<candidate_count;++i){
+        bool all_false = true;
+        for(int j=0; j<candidate_count;++j){
+            if(i==j)continue;
+            if(locked[j][i]==true){
+                all_false = false;
+            }
+        }
+        if(all_false==true){
+            printf("%s\n", candidates[i]);
+            return;
+        }
+    }
 }
 
 
