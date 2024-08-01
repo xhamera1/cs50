@@ -1,0 +1,3 @@
+One way to characterize user's audio aura is to calculate average energy, valence, and danceability of a person’s top 100 songs from the past year.
+It might not full correctly represent user's aura because it may favour more popular or newer songs and not reflect the actual musical preferences of the general public.
+One thing to improve this method is to consider using a larger dataset.
