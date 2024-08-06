@@ -7,6 +7,59 @@
         <title>Trivia!</title>
         <script>
             // TODO: Add code to check answers to questions
+            function reset_color(buttonID){
+                let button = document.getElementById(buttonID);
+                button.style.backgroundColor = '#ADD8E6';
+                button.style.color = 'black';
+            }
+
+            function change_red(buttonID, questionID){
+                let button = document.getElementById(buttonID);
+                let feedback = document.getElementById(questionID + '-feedback');
+                if(button.style.backgroundColor == 'red'){
+                    reset_color(buttonID);
+                    feedback.innerHTML = '';
+                    return;
+                }
+                button.style.backgroundColor = 'red';
+                button.style.color = 'white';
+                feedback.innerHTML = 'Incorrect';
+                feedback.style.color = 'red';
+            }
+            function change_green(buttonID,questionID){
+                let button = document.getElementById(buttonID);
+                let feedback = document.getElementById(questionID + '-feedback');
+                if(button.style.backgroundColor == 'green'){
+                    reset_color(buttonID);
+                    feedback.innerHTML = '';
+                    return;
+                }
+                button.style.backgroundColor = 'green';
+                button.style.color = 'white';
+                feedback.innerHTML = 'Correct';
+                feedback.style.color = 'green';
+            }
+            function submitAnswer(){
+                let answerInput = document.querySelector('input[name="answer1"]');
+                let answer = answerInput.value.trim().toLowerCase();
+                let feedback = document.getElementById('question3-feedback');
+                if(checkAnswer(answer)){
+                    feedback.innerHTML = 'Correct';
+                    feedback.style.color = 'green';
+                    answerInput.style.backgroundColor = 'green';
+                    answerInput.style.color = 'white';
+                }
+                else{
+                    feedback.innerHTML = 'Incorrect';
+                    feedback.style.color = 'red';
+                    answerInput.style.backgroundColor = 'red';
+                    answerInput.style.color = 'white';
+                }
+            }
+
+            function checkAnswer(answer){
+                return answer=='swetrze';
+            }
         </script>
     </head>
     <body>
@@ -17,14 +70,37 @@
         <div class="container">
             <div class="section">
                 <h2>Part 1: Multiple Choice </h2>
-                <hr>
+                <hr> <!-- horizontal line -->
                 <!-- TODO: Add multiple choice question here -->
+                 <h3 class="question">
+                    Dostawę czego bez faktory ma dostać orzeł?
+                 </h3>
+                 <button id='1A' onclick="change_red('1A', 'question1')">A. piwa</button>
+                 <button id='1B' onclick="change_green('1B', 'question1')">B. jaboli</button>
+                 <button id='1C' onclick="change_red('1C', 'question1')">C. jabłek</button>
+                 <button id='1D' onclick="change_red('1D', 'question1')">D. puszek</button>
+                 <div id="question1-feedback"></div>
+                 <h3 class="question">
+                    Dokończ słowa: "Siema siema, o tej porze"
+                 </h3>
+                 <button id='2A' onclick="change_green('2A', 'question2')">A. każdy wypić może.</button>
+                 <button id='2B' onclick="change_red('2B','question2')">B. każdy zbierać puszki może.</button>
+                 <button id='2C' onclick="change_red('2C','question2')">C. założyc sweter orła może.</button>
+                 <button id='2D' onclick="change_red('2D','question2')">D. każdy położyć się może.</button>
+                 <div id="question2-feedback"></div>
+
             </div>
 
             <div class="section">
                 <h2>Part 2: Free Response</h2>
                 <hr>
                 <!-- TODO: Add free response question here -->
+                <h3 class="question">
+                    Dokończ zdanie: "Orzeł, Orzeł, ty się upieczesz w tym "
+                </h3>
+                <input autocomplete="off" name="answer1" placeholder="Answer" type="text">
+                <button onclick="submitAnswer()">Odpowiedz</button>
+                <div id="question3-feedback"></div>
             </div>
         </div>
     </body>
