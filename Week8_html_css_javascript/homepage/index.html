@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+        <link href="styles.css" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <title>My Webpage</title>
+    </head>
+    <body id="bod" class="light-theme">
+         <header>
+            <a id="me" href="index.html">Patryk Chamera</a>
+            <script>
+                function change_theme() {
+                    var element = document.getElementById("bod");
+                    var element1 = document.getElementById("me");
+                    var links = document.querySelectorAll("#zakl a");
+                    var welcome = document.getElementById("welcome");
+                    var intro = document.getElementById("intro");
+
+                    if (element.classList.contains('light-theme')) {
+                        element.classList.remove('light-theme');
+                        element.classList.add('dark-theme');
+                        element1.style.color = "#5162FA";
+                        links.forEach(link => {
+                            link.style.color = "#5162FA";
+                        });
+                        welcome.style.color = "#DB68DF";
+                        intro.style.color = "#B356B6";
+                    } else {
+                        element.classList.remove('dark-theme');
+                        element.classList.add('light-theme');
+                        element1.style.color = "#491147";
+                        links.forEach(link => {
+                            link.style.color = "#491147";
+                        });
+                        welcome.style.color = "#491147";
+                        intro.style.color = "#31123C";
+                    }
+                }
+            </script>
+            <button class="theme" onclick="change_theme()">Change theme</button>
+            <nav>
+                <div id="zakl" class="zakl">
+                    <a href="index.html">Home</a>
+                    <a href="about.html">About</a>
+                    <a href="services.html">Services</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </nav>
+        </header>
+        <img class="batman" alt="photo of me" src="batman.jpeg" width="300" height="360">
+        <div class="theme-color">
+            <h1 class="welcome" id="welcome">
+                Welcome to my homepage!
+            </h1>
+            <div id="intro">
+                <h3 class="intro">
+                    My name is Patryk Chamera and I’m a second-year student of Computer Science and Intelligent Systems at AGH-UST in Krakow. My Tech Stack:
+                </h3>
+                <ul class="stack">
+                    <li>C</li>
+                    <li>C++</li>
+                    <li>Python</li>
+                </ul>
+                <h3 class="intro">
+                    Currently learning:
+                </h3>
+                <ul class="stack">
+                    <li>SQL</li>
+                    <li>HTLM/CSS/javascript</li>
+                </ul>
+            </div>
+            <div class="social_items">
+                <a href="https://www.linkedin.com/in/patryk-chamera-309835289/"><i class="fa fa-linkedin-square" style="font-size:44px; color: black"></i></a>
+                <a href="https://github.com/xhamera1"><i class="fa fa-github" style="font-size:44px; color: black"></i></a>
+            </div>
+        </div>
+        <div>
+            <button class="hireme" onclick="window.location.href='contact.html'">Hire me</button>
+        </div>
+    </body>
+</html>
