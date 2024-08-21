@@ -1,5 +1,6 @@
 import os
 
+from decimal import Decimal
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
@@ -45,7 +46,79 @@ def index():
 @login_required
 def buy():
     """Buy shares of stock"""
-    return apology("TODO")
+    if request.method == "POST":
+        symbol = request.form.get("symbol").upper()
+        shares = request.form.get("shares")
+        if not symbol:
+            return apology("MISSING SYMBOL", 400)
+        if not shares.isdigit():
+            return apology("INVALID NUMBER OF SHARES", 400)
+        
+        shares = int(shares)
+
+        look = lookup(symbol)
+        if not look:
+            return apology("INVALID SYMBOL", 400)
+        
+        symbol = look["symbol"]
+        price = float(look["price"]) 
+
+        user_id = session.get("user_id")
+        cash_result = db.execute("SELECT cash FROM users WHERE id = ?", user_id)
+        if not cash_result:
+            return apology("USER NOT FOUND", 400)
+        
+        cash = float(cash_result[0]["cash"]) 
+
+        total_amount = float(shares) * price
+
+        if cash >= total_amount:
+            new_cash = cash - total_amount
+            db.execute(
+                "INSERT INTO transactions (user_id, operation, symbol, price, amount, date) VALUES (?, ?, ?, ?, ?, datetime('now'))",
+                user_id,
+                "buy",
+                symbol,
+                round(price, 2), 
+                shares
+            )
+            row = db.execute(
+                "SELECT symbol FROM wallet WHERE user_id = ? AND symbol = ?",
+                user_id,
+                symbol
+            )
+            if len(row) == 0:
+                db.execute(
+                    "INSERT INTO wallet (user_id, symbol, amount) VALUES (?, ?, ?)",
+                    user_id,
+                    symbol,
+                    shares
+                )
+            else:
+                row = db.execute(
+                    "SELECT amount FROM wallet WHERE user_id = ? AND symbol = ?",
+                    user_id,
+                    symbol
+                )
+                old_shares = row[0]["amount"]
+                new_shares = old_shares + shares
+                db.execute(
+                    "UPDATE wallet SET amount = ? WHERE user_id = ? AND symbol = ?",
+                    new_shares,
+                    user_id,
+                    symbol
+                )
+            db.execute(
+                "UPDATE users SET cash = ROUND(?, 2) WHERE id = ?",
+                new_cash,
+                user_id
+            )
+
+            return redirect("/")
+        else:
+            return apology("CAN'T AFFORD", 400)
+    else:
+        return render_template("buy.html")
 
 
 @app.route("/history")
