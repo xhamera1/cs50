@@ -78,7 +78,14 @@ def lookup(symbol):
         # CSV header: Date,Open,High,Low,Close,Adj Close,Volume
         quotes = list(csv.DictReader(response.content.decode("utf-8").splitlines()))
         price = round(float(quotes[-1]["Adj Close"]), 2)
-        return {"price": price, "symbol": symbol}
+        return {
+            "price": price,
+            "symbol": symbol,
+            "high": float(quotes[-1]["High"]),
+            "low": float(quotes[-1]["Low"]),
+            "open": float(quotes[-1]["Open"]),
+            "volume": int(quotes[-1]["Volume"])
+        }
     except (KeyError, IndexError, requests.RequestException, ValueError):
         return None
 

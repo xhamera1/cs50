@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Sell
+{% endblock %}
+
+{% block main %}
+    <h1>SELL SHARES</h1>
+    <form action="/sell" method="post">
+        <h4>Choose share</h4>
+        <select name="symbol" class="selectpicker dropup" data-dropup-auto="true">
+            <option disabled selected value="">Shares</option>
+            {% for row in rows %}
+                <option value="{{ row.symbol }}">{{ row.symbol }}</option>
+            {% endfor %}
+        </select>
+
+        <div class="mb-3">
+            <input class="form-control mx-auto w-auto" name="shares" placeholder="Amount" type="number">
+        </div>
+        <button class="btn btn-primary" type="submit">Sell</button>
+    </form>
+{% endblock %}
+

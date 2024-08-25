@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Favorite
+{% endblock %}
+
+{% block main %}
+    <h3>
+        Add new share
+    </h3>
+    <form action="/favorite" method="post">
+        <div class="form-outline" data-mdb-input-init>
+            <input type="text" name="add" class="form-control" placeholder="Add new share to favorites (symbol)"/>
+        </div>
+        <div class="container">               
+            <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title m-b-0">Your favorite shares</h5>
+                    </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">Delete</th>
+                                        <th scope="col">Symbol</th>
+                                        <th scope="col">Current value</th>
+                                        <th scope="col">High</th>
+                                        <th scope="col">Low</th>
+                                        <th scope="col">Volume</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="customtable">
+                                    {% for row in rows %}
+                                    <tr>
+                                            <td>
+                                                <form action="/delete_favorite" method="post" style="display:inline;">
+                                                    <input type="hidden" name="symbol" value="{{ row.symbol }}">
+                                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                                </form>
+                                            </td>
+                                            <td>{{ row.symbol }}</td>
+                                            <td>{{ row.price }}</td>
+                                            <td>{{ row.high }}</td>
+                                            <td>{{ row.low }}</td>
+                                            <td>{{ row.volume }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                </div>
+            </div>
+        </div>
+       </div> 
+    </form>
+    
+{% endblock %}
+

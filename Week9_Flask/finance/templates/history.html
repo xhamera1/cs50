@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    History
+{% endblock %}
+
+{% block main %}
+    
+    <h1>
+        History of your transactions
+    </h1>
+    <div>
+        <table class="table table-light">
+            <thead>
+                <tr>
+                    <th>Type of transaction</th>
+                    <th>Shares</th>
+                    <th>Purchase/Sell price</th>
+                    <th>Number of shares</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                <tr>
+                        <td>{{ row.operation }} </td>
+                        <td> {{ row.symbol }} </td>
+                        <td> {{ row.price }} </td>
+                        <td> {{ row.amount }} </td>
+                        <td> {{ row.date }} </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
+

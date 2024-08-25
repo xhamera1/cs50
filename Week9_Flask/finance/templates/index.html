@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Buy
+{% endblock %}
+
+{% block main %}
+
+    <h1>
+        There is your current wallet:
+    </h1>
+    <h2>
+        Cash: {{ cash }}
+    </h2>
+    <div>
+        <table class="table table-light">
+            <thead>
+                <tr>
+                    <th>Stocks</th>
+                    <th>Number of shares</th>
+                    <th>Current price of 1 share</th>
+                    <th>Total value</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                <tr>
+                        <td>{{ row.symbol }} </td>
+                        <td> {{ row.amount }} </td>
+                        <td> {{ row.price }} </td>
+                        <td> {{ row.total }} </td>
+                </tr>
+                {% endfor %}
+                <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td> TOTAL: {{ all }} </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    
+{% endblock %}
+

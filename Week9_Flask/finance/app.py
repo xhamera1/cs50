@@ -39,7 +39,21 @@ def after_request(response):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    return apology("TODO")
+
+    user_id = session.get("user_id")
+    rows = db.execute("SELECT * FROM wallet WHERE user_id=?", user_id)
+    cash = db.execute("SELECT cash FROM users WHERE id=?", user_id)
+    cash = usd(cash[0]['cash'])
+    all = 0.0
+    for row in rows:
+        look = lookup(row['symbol'])
+        row['price'] = look['price']
+        row['total'] = row['amount']*row['price']
+        all += row['total']
+        row['total'] = usd(row['total'])
+        row['price'] = usd(look['price'])
+    all = usd(all)
+    return render_template("index.html", cash=cash, rows = rows, all=all)
 
 
 @app.route("/buy", methods=["GET", "POST"])
@@ -77,7 +91,7 @@ def buy():
             db.execute(
                 "INSERT INTO transactions (user_id, operation, symbol, price, amount, date) VALUES (?, ?, ?, ?, ?, datetime('now'))",
                 user_id,
-                "buy",
+                "BUY",
                 symbol,
                 round(price, 2), 
                 shares
@@ -125,7 +139,9 @@ def buy():
 @login_required
 def history():
     """Show history of transactions"""
-    return apology("TODO")
+    user_id = session.get("user_id")
+    rows = db.execute("SELECT * FROM transactions WHERE user_id=?", user_id)
+    return render_template("history.html", rows=rows)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -162,7 +178,6 @@ def login():
         # Redirect user to home page
         return redirect("/")
 
-    # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("login.html")
 
@@ -183,7 +198,19 @@ def logout():
 def quote():
     """Get stock quote."""
     if request.method == "POST":
-        if not request.form.get("symbol"):
+        symbol = request.form.get("symbol")
+        
+        if symbol is None:
+            return apology("INVALID SYMBOL", 403)  
+        if not isinstance(symbol, str):
+            return apology("INVALID SYMBOL", 403)  
+        symbol = symbol.strip()  
+        
+        if not symbol:
+            return apology("INVALID SYMBOL", 403) 
+
+        look = lookup(symbol)
+        if not look:
             return apology("INVALID SYMBOL", 403)
         data = lookup(request.form.get("symbol"))
         value = usd(data['price'])
@@ -198,42 +225,144 @@ def quote():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
-    session.clear()
-
-    if request.method == "POST":
-        if not request.form.get("username"):
-            return apology("must provide username to register", 403)
-
-        elif not request.form.get("password"):
-            return apology("must provide password to register", 403)
-        
-        elif not request.form.get("confirmation"):
-            return apology("must provide password again to register", 403)
-        
-        username = request.form.get("username")
-        password1 = request.form.get("password")
-        password2 = request.form.get("confirmation")
-
-        hash_password = generate_password_hash(password1, 'pbkdf2', 16)
-
-        if password1!=password2:
-            return apology("passwords must be the same", 403)
-        try:
-            db.execute("INSERT INTO users (username, hash) VALUES (?)", (username, hash_password))
-        except sqlite3.IntegrityError:
-            return apology("usename must be unique, try again", 403)
-        else:
-            return redirect("/")
-
-    else:
+    if request.method == "GET":
         return render_template("register.html")
+    else:
+        username = request.form.get("username")
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
+
+        existing_user = db.execute(
+            "SELECT username FROM users WHERE username = ?", username
+        )
+        if username == "" or existing_user:
+            return apology("Username is not available")
+        elif password == "":
+            return apology("MISSING PASSWORD")
+        elif confirmation == "" or (password != confirmation):
+            return apology("PASSWORDS DON'T MATCH")
+
+        password_hash = generate_password_hash(
+            password, method="pbkdf2", salt_length=16
+        )
+
+        result = db.execute(
+            "INSERT INTO users(username, hash) VALUES (?, ?)", username, password_hash
+        )
+
+        if result:
+            user_data = db.execute("SELECT id FROM users WHERE username = ?", username)
+            if user_data:
+                user_id = user_data[0]["id"]
+                session["user_id"] = user_id
+
+                return redirect("/")
+        return apology("Registration failed")
 
 
 @app.route("/sell", methods=["GET", "POST"])
 @login_required
 def sell():
     """Sell shares of stock"""
-    return apology("TODO")
+    user_id = session.get("user_id")
+    rows = db.execute("SELECT * FROM wallet WHERE user_id=?", user_id)
+    if request.method == "POST":
+        if not request.form.get("shares") or not request.form.get("amount"):
+            return apology("You should choose shares or/and amount correctly", 403)
+        
+        shares = request.form.get("shares")
+        amount_tosell = int(request.form.get("amount"))
+        if amount_tosell<=0:
+            return apology("Must be a positive number")
+        all_shares = db.execute("SELECT symbol FROM wallet WHERE user_id=?", user_id)
+        symbol = [row['symbol'] for row in all_shares]
+        if shares not in symbol:
+            return apology("You do not have this shares")
+
+        holding_shares = db.execute("SELECT * FROM wallet WHERE user_id=? and symbol=?",user_id,shares)
+        holding_shares = int(holding_shares[0]["amount"])
+        if holding_shares<amount_tosell:
+            return apology("You do not have this amount of shares")
+        
+        look = lookup(shares)
+        if not look:
+            return apology("INVALID SYMBOL", 400)
+        
+        shares = look["symbol"]
+        price = float(look["price"]) 
+        db.execute("INSERT INTO transactions (user_id, operation, symbol, price, amount, date) VALUES (?, ?, ?, ?, ?, datetime('now'))",
+                        user_id,
+                        "SELL",
+                        shares,
+                        round(price, 2), 
+                        amount_tosell
+                    ) 
+        shares = request.form.get("shares")
+        old_amount = db.execute("SELECT * FROM wallet where user_id=? and symbol=?", user_id, shares)
+        old_amount = int(old_amount[0]["amount"])
+        new_amount = old_amount-amount_tosell
+        if new_amount!=0:
+            db.execute("UPDATE wallet SET amount=? WHERE user_id=? and symbol=?",new_amount,user_id,shares)
+        else:
+            db.execute("DELETE FROM wallet WHERE user_id=? and symbol=?", user_id, shares)
+
+        cash_result = db.execute("SELECT cash FROM users WHERE id = ?", user_id)
+        if not cash_result:
+            return apology("USER NOT FOUND", 400)
+        
+        cash = float(cash_result[0]["cash"]) 
+
+        total_amount = float(amount_tosell) * price
+        new_cash = cash+total_amount
+        db.execute(
+                "UPDATE users SET cash = ROUND(?, 2) WHERE id = ?",
+                new_cash,
+                user_id
+            )
+        return redirect("/")
+    else:
+        return render_template("sell.html", rows=rows)
+    
+
+@app.route("/favorite", methods=["GET", "POST"])
+@login_required
+def favorite():
+    user_id = session.get("user_id")
+    if request.method == "POST":
+        new_favorite = request.form.get("add")
+        look = lookup(new_favorite)
+        if not look:
+            return apology("INVALID SYMBOL", 403)
+        new_favorite = look["symbol"]
+        db.execute("INSERT OR IGNORE INTO favorite (user_id, symbol) VALUES (?, ?)", user_id, new_favorite)
+        return redirect("/favorite")
+    else:
+        rows = db.execute("SELECT symbol FROM favorite WHERE user_id=?", user_id)
+        favorite_data = []
+        for row in rows:
+            symbol = row["symbol"]
+            data = lookup(symbol)
+            if data:
+                favorite_data.append({
+                    "symbol": data["symbol"],
+                    "price": usd(data["price"]),
+                    "high": usd(data["high"]),
+                    "low": usd(data["low"]),
+                    "volume": data["volume"]
+                })
+        return render_template("favorite.html", rows=favorite_data)
+
+
+
+@app.route("/delete_favorite", methods=["POST"])
+@login_required
+def delete_favorite():
+    user_id = session.get("user_id")
+    symbol = request.form.get("symbol")
+    db.execute("DELETE FROM favorite WHERE user_id = ? AND symbol = ?", user_id, symbol)
+    return redirect("/favorite")
+
+
 
 
 if __name__ == "__main__":
