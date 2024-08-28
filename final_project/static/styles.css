@@ -1,0 +1,48 @@
+@import url(http://fonts.googleapis.com/css?family=Calibri:400,300,700);
+
+.bg-body {
+    background-image: url('/static/bg4.jpg');
+    background-attachment: fixed;
+    background-repeat: no-repeat; 
+    background-size: cover; 
+    background-position: center;
+}
+.bg-nav{
+    background-image: url('/static/bg1.jpg');
+    border-style: solid;
+    border-color: #3f1e03;
+    border-radius: 30px;
+}
+
+.bg-nav .navbar-brand {
+    font-family: 'Calibri', sans-serif !important;
+    color: #f9f3f3;
+    font-size: 470%;
+    -webkit-text-stroke: 1.5px black;
+}
+
+.bg-nav .nav-link {
+    font-family: 'Calibri', sans-serif !important;
+    color: #fff;
+    font-size: 280%;
+    -webkit-text-stroke: 1.5px black;
+}
+
+.bg-nav .nav-link.active {
+    font-family: 'Calibri', sans-serif !important;
+    color: #fff;
+    font-size: 280%;
+    -webkit-text-stroke: 1.5px black;
+}
+
+.bg-nav .nav-link:hover {
+    font-family: 'Calibri', sans-serif !important;
+    color: lightgray;
+    font-size: 280%;
+    -webkit-text-stroke: 1.5px black;
+}
+
+.navbar-brand img {
+    height: 120px; 
+    margin-right: 10px; 
+}

@@ -25,7 +25,7 @@ Session(app)
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///finance.db")
 
-
+ 
 @app.after_request
 def after_request(response):
     """Ensure responses aren't cached"""
@@ -67,22 +67,22 @@ def buy():
             return apology("MISSING SYMBOL", 400)
         if not shares.isdigit():
             return apology("INVALID NUMBER OF SHARES", 400)
-        
+
         shares = int(shares)
 
         look = lookup(symbol)
         if not look:
             return apology("INVALID SYMBOL", 400)
-        
+
         symbol = look["symbol"]
-        price = float(look["price"]) 
+        price = float(look["price"])
 
         user_id = session.get("user_id")
         cash_result = db.execute("SELECT cash FROM users WHERE id = ?", user_id)
         if not cash_result:
             return apology("USER NOT FOUND", 400)
-        
-        cash = float(cash_result[0]["cash"]) 
+
+        cash = float(cash_result[0]["cash"])
 
         total_amount = float(shares) * price
 
@@ -93,7 +93,7 @@ def buy():
                 user_id,
                 "BUY",
                 symbol,
-                round(price, 2), 
+                usd(round(price, 2)),
                 shares
             )
             row = db.execute(
@@ -199,23 +199,23 @@ def quote():
     """Get stock quote."""
     if request.method == "POST":
         symbol = request.form.get("symbol")
-        
+
         if symbol is None:
-            return apology("INVALID SYMBOL", 403)  
+            return apology("INVALID SYMBOL", 400)
         if not isinstance(symbol, str):
-            return apology("INVALID SYMBOL", 403)  
-        symbol = symbol.strip()  
-        
+            return apology("INVALID SYMBOL", 400)
+        symbol = symbol.strip()
+
         if not symbol:
-            return apology("INVALID SYMBOL", 403) 
+            return apology("INVALID SYMBOL", 400)
 
         look = lookup(symbol)
         if not look:
-            return apology("INVALID SYMBOL", 403)
+            return apology("INVALID SYMBOL", 400)
         data = lookup(request.form.get("symbol"))
         value = usd(data['price'])
         if not data:
-            return apology("INVALID SYMBOL", 403)
+            return apology("INVALID SYMBOL", 400)
         return render_template("quoted.html", data=data, value=value)
     else:
         return render_template("quote.html")
@@ -267,11 +267,11 @@ def sell():
     user_id = session.get("user_id")
     rows = db.execute("SELECT * FROM wallet WHERE user_id=?", user_id)
     if request.method == "POST":
-        if not request.form.get("shares") or not request.form.get("amount"):
-            return apology("You should choose shares or/and amount correctly", 403)
-        
-        shares = request.form.get("shares")
-        amount_tosell = int(request.form.get("amount"))
+        if not request.form.get("shares") or not request.form.get("symbol"):
+            return apology("You should choose shares or/and amount correctly", 400)
+
+        shares = request.form.get("symbol")
+        amount_tosell = int(request.form.get("shares"))
         if amount_tosell<=0:
             return apology("Must be a positive number")
         all_shares = db.execute("SELECT symbol FROM wallet WHERE user_id=?", user_id)
@@ -283,21 +283,21 @@ def sell():
         holding_shares = int(holding_shares[0]["amount"])
         if holding_shares<amount_tosell:
             return apology("You do not have this amount of shares")
-        
+
         look = lookup(shares)
         if not look:
             return apology("INVALID SYMBOL", 400)
-        
+
         shares = look["symbol"]
-        price = float(look["price"]) 
+        price = float(look["price"])
         db.execute("INSERT INTO transactions (user_id, operation, symbol, price, amount, date) VALUES (?, ?, ?, ?, ?, datetime('now'))",
                         user_id,
                         "SELL",
                         shares,
-                        round(price, 2), 
+                        usd(round(price, 2)),
                         amount_tosell
-                    ) 
-        shares = request.form.get("shares")
+                    )
+        shares = request.form.get("symbol")
         old_amount = db.execute("SELECT * FROM wallet where user_id=? and symbol=?", user_id, shares)
         old_amount = int(old_amount[0]["amount"])
         new_amount = old_amount-amount_tosell
@@ -309,8 +309,8 @@ def sell():
         cash_result = db.execute("SELECT cash FROM users WHERE id = ?", user_id)
         if not cash_result:
             return apology("USER NOT FOUND", 400)
-        
-        cash = float(cash_result[0]["cash"]) 
+
+        cash = float(cash_result[0]["cash"])
 
         total_amount = float(amount_tosell) * price
         new_cash = cash+total_amount
@@ -322,7 +322,7 @@ def sell():
         return redirect("/")
     else:
         return render_template("sell.html", rows=rows)
-    
+
 
 @app.route("/favorite", methods=["GET", "POST"])
 @login_required
