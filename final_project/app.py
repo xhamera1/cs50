@@ -68,7 +68,7 @@ def rentequipmentloged():
     return render_template("rentequipmentloged.html", rows = rows1)
 
 
-
+"""small change just to check smh"""
 """must change situation where available==0 """
 @app.route("/yourprofil")
 @login_required
