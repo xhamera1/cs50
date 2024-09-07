@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Your profile
+{% endblock %}
+
+{% block main %}
+
+<h1 class="h1c">Items you are currently renting:</h1>
+
+<div class="container">
+  <div class="row">
+    {% for item_currently in items_currently %}
+    <div class="col-md-6 my-3">
+      <div class="card">
+        <div class="card-body d-flex flex-row">
+          <div>
+            <h5 class="card-title font-weight-bold mb-2">{{ item_currently.name }}</h5>
+            <h4 class="card-text"><i class="far fa-clock pe-2"></i>Rented: {{ item_currently.rent_date }}</h4>
+            <h4  class="card-text"><i class="far fa-clock pe-2"></i>Back date: {{ item_currently.back_date }}</h4>
+        </div>
+        </div>
+        <div class="bg-image hover-overlay ripple rounded-0" data-mdb-ripple-color="light">
+          <img class="img-fluid" src="/static/{{ item_currently.item_id }}.jpg" alt="Item photo" />
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+
+
+<h1 class="h1p">Items you were renting int the past</h1>
+
+
+<div class="container">
+  <div class="row">
+    {% for item_past in items_past %}
+    <div class="col-md-6 my-3">
+      <div class="card">
+        <div class="card-body d-flex flex-row">
+          <div>
+            <h5 class="card-title font-weight-bold mb-2">{{ item_past.name }}</h5>
+            <h4 class="card-text"><i class="far fa-clock pe-2"></i>Rented: {{ item_past.rent_date }}</h4>
+            <h4  class="card-text"><i class="far fa-clock pe-2"></i>Back date: {{ item_past.back_date }}</h4>
+        </div>
+        </div>
+        <div class="bg-image hover-overlay ripple rounded-0" data-mdb-ripple-color="light">
+          <img class="img-fluid" src="/static/{{ item_past.item_id }}.jpg" alt="Item photo" />
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}
+

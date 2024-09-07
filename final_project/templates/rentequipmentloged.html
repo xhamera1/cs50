@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Rent Equipment
+{% endblock %}
+
+{% block main %}
+
+<form action="/cart" method="post">
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        {% for row in rows %}
+        <div class="col">
+          <div class="card">
+            <img src="/static/{{ row.item_id }}.jpg" class="card-img-top" alt="{{ row.item_id }}">
+            <div class="card-body">
+                <h5 class="card-title"><a style="color: #c33607 "href="#">{{ row.name }}</a></h5>
+                <p class="card-text">
+                    <p>Available: {{ row.available }}</p>
+                    <p>Cost per 1 day: {{ row.price_daily }}</p>
+                </p>
+                <form action="/cart" method="post">
+                    <input type="hidden" name="action" value="add">
+                    <input name="item_id" type="hidden" value="{{ row.item_id }}">
+                    <button type="submit" class="btn btn-primary">Add to Cart</button>
+                </form>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+    </div>
+</form>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Rent Equipment
+{% endblock %}
+
+{% block main %}
+
+<h1>ITEMS IN OUR SHOP</h1>
+<h2 style="color: #c50a0a;">LOG IN TO RENT</h2>
+
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    {% for row in rows %}
+    <div class="col">
+      <div class="card">
+        <img src="/static/{{ row.item_id }}.jpg" class="card-img-top" alt="{{ row.item_id }}">
+        <div class="card-body">
+          <h5 class="card-title"><a style="color: #c33607 "href="/login">{{ row.name }}</a></h5>
+          <p class="card-text"><p>Available: {{ row.available }}</p> <p>Cost per 1 day: {{ row.price_daily }}</p></p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+  
+    
+{% endblock %}

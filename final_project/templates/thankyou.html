@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Thank You
+{% endblock %}
+
+{% block main %}
+
+<h1>THANK YOU FOR YOUR RESERVATION</h1>
+<h2>ITEMS RESERVED FOR PICKUP:</h2>
+<h2>Rent date: {{ rent_date }}</h2>
+<h2>Back date: {{ back_date }}</h2>
+<h2>Total price: {{ days_difference }} * {{ total_price_daily }} = {{ total_price }}</h2>
+
+<div class="container mx-auto mt-4">
+    <div class="row">
+        {% for item in cart %}
+        <div class="col-md-4"> 
+            <div class="card" style="width: 18rem;">
+                <img src="/static/{{ item.item_id }}.jpg" class="card-img-top" alt="{{ item.name }}">
+                <div class="card-body">
+                    <h4 class="card-title">{{ item.name }}</h4>
+                    <h5>{{ item.price_daily }}</h5>
+                </div>
+            </div>
+        </div> 
+        {% endfor %}
+    </div> 
+</div> 
+
+{% endblock %}

@@ -15,10 +15,17 @@
 <body class="bg-body">
     <nav class="navbar navbar-expand-bg navbar-dark bg-nav">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{% if session.get('user_id') %}/home{% else %}/ {% endif %}">
+            <a class="navbar-brand" href="{% if session.get('user_id') %} /home {% else %}/ {% endif %}">
                 <img src="/static/logoBudoRent.jpg" alt="Logo" class="d-inline-block align-text-top">
                 BudoRent
             </a>
+            <div class="ms-auto d-flex align-items-center">
+                <a href="{% if session.get('user_id') %}/cart{% else %} /login {% endif %}" class="cart-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="37" height="37" fill="currentColor" class="bi bi-cart2" viewBox="0 0 16 16">
+                        <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l1.25 5h8.22l1.25-5zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0"/>
+                    </svg>
+                </a>
+            </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -29,10 +36,10 @@
                         <a class="nav-link active" aria-current="page" href="/home">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/equipment">Your profile</a>
+                        <a class="nav-link" href="/yourprofil">Your profile</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/equipment">Rent equipment</a>
+                        <a class="nav-link" href="/rentequipmentloged">Rent equipment</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/ourstores">Our stores</a>
@@ -55,7 +62,7 @@
                         <a class="nav-link active" aria-current="page" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/equipment">Rent equipment</a>
+                        <a class="nav-link" href="/rentequipment">Rent equipment</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/ourstores">Our stores</a>
@@ -83,5 +90,12 @@
     <main class="bg-custom container py-5 text-center">
         {% block main %}{% endblock %}
     </main>
+
+    <!-- Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <!-- BootstrapVue -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.21.2/dist/bootstrap-vue.js"></script>
+    <!-- Twój plik main.js -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
