@@ -69,7 +69,7 @@ def rentequipmentloged():
 
 
 
-"""must change situation where available==0"""
+"""must change situation where available==0 """
 @app.route("/yourprofil")
 @login_required
 def yourprofil():
