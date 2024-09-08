@@ -14,7 +14,7 @@
 -User Account Management: Users have access to a personal dashboard where they can view their current and past reservations.
 -Database Integration: All data, including user accounts, equipment inventory, and reservations, is managed using a SQL database for efficient storage and retrieval.
 ### Technologies Used:
--Flask (Python): Backend framework to handle routing, user authentication, and database interaction.
+-** Flask (Python): Backend framework to handle routing, user authentication, and database interaction.
 -HTML/CSS: Frontend development for designing a clean, user-friendly interface.
 -SQL: Database management to store user data, equipment listings, and reservations.
 -Mobile-Responsive Design: The app is designed to work seamlessly on mobile devices, providing a smooth user experience.
