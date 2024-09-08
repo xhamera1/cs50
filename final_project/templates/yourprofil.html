@@ -5,9 +5,10 @@
 {% endblock %}
 
 {% block main %}
-
 <h1 class="h1c">Items you are currently renting:</h1>
-
+{% if not items_currently %} 
+<h1 class="h1_past">Your are not renting any item currently</h1>
+{% else %}
 <div class="container">
   <div class="row">
     {% for item_currently in items_currently %}
@@ -29,11 +30,14 @@
   </div>
 </div>
 
+{% endif %}
 
 
+<h1 class="h1p">Items you were renting in the past:</h1>
 
-<h1 class="h1p">Items you were renting int the past</h1>
-
+{% if not items_past %} 
+<h1 class="h1_past">You do not have any history in renting items in our shop. It is time to change that!</h1>
+{% else %}
 
 <div class="container">
   <div class="row">
@@ -55,6 +59,8 @@
     {% endfor %}
   </div>
 </div>
+
+{% endif %}
 
 {% endblock %}
 

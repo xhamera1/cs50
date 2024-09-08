@@ -288,3 +288,8 @@ p.lead {
     border-color: #3f1e03;
     border-radius: 25px;
   }
+
+  .h1_past{
+    font-size: 120%;
+    color: #b41818;
+  }
