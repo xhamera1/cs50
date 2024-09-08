@@ -10,7 +10,7 @@
 - **Date of Video Recording**: 09-08-2024
 
 ### Video Demo
-[Click here to view the video demo](<URL_HERE>)
+[Click here to view the video demo](<https://youtu.be/1OVRI0UpEWo?si=pCm9kshIPI7TyBLD>)
 
 ## Description
 For my CS50 final project, I created a mobile application called **BudoRent** using **Flask**, **Python**, **HTML**, **CSS**, and **SQL**. The purpose of the app is to facilitate the rental of construction equipment, such as drills, screwdrivers, ladders, and other tools.
