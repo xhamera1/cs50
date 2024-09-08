@@ -68,8 +68,6 @@ def rentequipmentloged():
     return render_template("rentequipmentloged.html", rows = rows1)
 
 
-"""small change just to check smh"""
-"""must change situation where available==0 """
 @app.route("/yourprofil")
 @login_required
 def yourprofil():
@@ -92,6 +90,9 @@ def cart():
         if action == "add":
             item_id = request.form.get("item_id")
             if item_id in session["cart"]:
+                return redirect("/rentequipmentloged")  
+            result = db.execute("SELECT available FROM equipment WHERE item_id=?", item_id)
+            if result and result[0]["available"]==0:
                 return redirect("/rentequipmentloged")  
             if item_id:
                 session["cart"].append(item_id)
