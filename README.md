@@ -13,7 +13,7 @@ I successfully completed Harvard's **CS50x Introduction to Computer Science**, a
 4. **Memory** – Concepts of memory management and pointers.
 5. **Data Structures** – Implementing and using data structures like linked lists, hash tables, and stacks.
 6. **Python** – High-level programming and solving real-world problems using Python.
-6.5. **Artificial Intelligence (AI)** – Basics of AI and machine learning.
+**Artificial Intelligence (AI)** – Basics of AI and machine learning.
 7. **SQL** – Working with databases and SQL queries.
 8. **HTML, CSS, and JavaScript** – Introduction to web development and building dynamic web pages.
 9. **Flask** – A microframework for Python used for building web applications.
