@@ -1,6 +1,6 @@
 # My CS50x Journey
 
-![CS50x Certificate](C:\Users\chame\Desktop\CS50\cs50_C\CS50xCertificate_png.png)
+![CS50x Certificate](CS50xCertificate_png.png)
 
 ## Overview
 I successfully completed Harvard's **CS50x Introduction to Computer Science**, a comprehensive course designed to introduce fundamental concepts in computer science and programming. Throughout the course, I explored various topics, completed weekly problem sets, and culminated my learning with a final project.
